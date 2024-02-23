@@ -1,7 +1,7 @@
 import yaml
 import os
 import argparse
-
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 from SSR.datasets.replica import replica_datasets
 from SSR.datasets.scannet import scannet_datasets
 from SSR.datasets.replica_nyu import replica_nyu_cnn_datasets
@@ -16,7 +16,7 @@ def train():
     parser = argparse.ArgumentParser()
     # parser.add_argument('--config_file', type=str, default="/home/shuaifeng/Documents/PhD_Research/CodeRelease/SemanticSceneRepresentations/SSR/configs/SSR_room2_config_release.yaml", 
     #                     help='config file name.')
-    parser.add_argument('--config_file', type=str, default="/home/shuaifeng/Documents/PhD_Research/CodeRelease/SemanticSceneRepresentations/SSR/configs/SSR_room0_config_test.yaml", 
+    parser.add_argument('--config_file', type=str, default="/home/drx/projects/semantic_nerf/SSR/configs/SSR_room0_config.yaml", 
                     help='config file name.')
     parser.add_argument('--dataset_type', type=str, default="replica", choices= ["replica", "replica_nyu_cnn", "scannet"], 
                         help='the dataset to be used,')
@@ -81,9 +81,11 @@ def train():
         print("----- Replica Dataset -----")
 
         total_num = 900
-        step = 5
-        train_ids = list(range(0, total_num, step))
-        test_ids = [x+step//2 for x in train_ids]  
+        # step = 5
+        # train_ids = list(range(0, total_num, step))
+        # test_ids = [x+step//2 for x in train_ids]  
+        train_ids = [i for i in range(total_num) if i % 8 != 0]
+        test_ids = [i for i in range(total_num) if i % 8 == 0]
         #add ids to config for later saving.
         config["experiment"]["train_ids"] = train_ids
         config["experiment"]["test_ids"] = test_ids

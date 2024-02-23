@@ -1125,7 +1125,10 @@ class SSRTrainer(object):
                 self.tfb_viz.vis_scalars(global_step,
                         [miou_test, miou_test_validclass, total_accuracy_test, class_average_accuracy_test],
                         ['Test/Metric/mIoU', 'Test/Metric/mIoU_validclass', 'Test/Metric/total_acc', 'Test/Metric/avg_acc'])
-
+                tqdm.write(f"[Testing Metric] Iter: {global_step} "
+                       f"img_loss: {total_img_loss.item()}, semantic_loss: {(total_sem_loss*wgt_sem_loss).item()},"
+                       f"psnr_coarse: {psnr_coarse.item()}, psnr_fine: {psnr_fine.item()},"
+                       f"mIoU: {miou_test}, total_acc: {total_accuracy_test}, avg_acc: {class_average_accuracy_test}")
 
                 if dataset_type == "replica_nyu_cnn": 
                     # we also evaluate the rendering against the trained CNN labels in addition to perfect GT labels
